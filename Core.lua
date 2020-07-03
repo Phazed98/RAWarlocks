@@ -82,7 +82,7 @@ end
 
 -- Called Whenever the Panel is opened, Will add any new Warlocks, and Refresh the UI
 function RAW_Core:FindAllWarlocks()	
-		
+
 	-- Go Through the Current List of Warlocks, mark them dirty, if they arent still in raid they will be removed from the list
 	for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
 		ExistingWarlock.bDirty = true
@@ -97,39 +97,32 @@ function RAW_Core:FindAllWarlocks()
 	for Index = 1, GetNumGroupMembers(), 1  do
 		-- Grab the raider info from the WOWAPI
 		local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(Index);
-		
-		if (RaiderClass ~= nil) then
-			if (RAW.Debug) or (RaiderClass == "Warlock") then
 
-				local bExists = false;
+		if RAW.Debug or (RaiderClass == "Warlock") then
 
-				-- Iterate the Warlock lsit and match via name
-				for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
-					if ExistingWarlock.Name == RaiderName then
-						ExistingWarlock.bDirty = false
-						bExists = true
-					end
-				end
+			RAW_Core:Print(RaiderName)
 
-				-- Add a new Warlock to the list
-				if not bExists then
-					local Warlock = {}
-					Warlock.Name = RaiderName
-					Warlock.bDirty = false
-					Warlock.Curse = RAW.Types.Curses[10].Text
-					Warlock.Spec = "(0/0/0)"
-					Warlock.CanCorruption = false
+			local bExists = false;
 
-					RAW_Core.WarlockList[#RAW_Core.WarlockList + 1] = Warlock
+			-- Iterate the Warlock lsit and match via name
+			for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
+				if ExistingWarlock.Name == RaiderName then
+					ExistingWarlock.bDirty = false
+					bExists = true
 				end
 			end
-		end
-	end
 
-	-- Go Through the Current List of Warlocks, Update the Role for Local Player Role
-	for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
-		if ExistingWarlock.Name == UnitName("player") then
-			ExistingWarlock.Role = RAW_Core.LocalRole
+			-- Add a new Warlock to the list
+			if not bExists then
+				local Warlock = {}
+				Warlock.Name = RaiderName
+				Warlock.bDirty = false
+				Warlock.Curse = RAW.Types.Curses[9].Text
+				Warlock.Spec = "(0/0/0)"
+				Warlock.CanCorruption = false
+
+				RAW_Core.WarlockList[#RAW_Core.WarlockList + 1] = Warlock
+			end
 		end
 	end
 

@@ -17,8 +17,7 @@ RAW.Types.Curses =
 	{ Id = 6, Text =  "Curse of Doom"},
 	{ Id = 7, Text =  "Curse of Tongues"},
 	{ Id = 8, Text =  "Curse of Exhaustion"},
-	{ Id = 9, Text =  "Curse of Santa"},
-	{ Id = 10, Text =  "No Curse"},
+	{ Id = 9, Text =  "No Curse"},
 }
 
 -- Spell Icon IDs used to show various Icons in the UI
@@ -33,7 +32,6 @@ RAW.Types.SpellIcons =
 	["Curse of Doom"]			= 136122,
 	["Curse of Tongues"]		= 136140,
 	["Curse of Exhaustion"]		= 136162,
-	--["Curse of Santa"]			= 133169,
 	["No Curse"] = 0,
 }
 
