@@ -1,0 +1,237 @@
+<Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+  <Frame name="RAWarlocks" toplevel="true" movable="true" parent="UIParent" hidden="true">
+    <Size x='480' y='600'/>
+    <Anchors>
+      <Anchor point='CENTER'/>
+    </Anchors>
+    <Layers>
+      <Layer level='BACKGROUND'>
+        <Texture level='0' file='interface/paperdollinfoframe/ui-character-general-topleft.blp'> <!-- file='interface/spellbook/ui-spellbookpanel-topleft.blp'> -->
+          <Size>
+            <AbsDimension x="300" y="300"/>
+          </Size>
+          <Anchors>
+            <Anchor point="TOPLEFT">
+              <Offset>
+                <AbsDimension x="0" y="0"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+        <Texture level='0' file='interface/paperdollinfoframe/ui-character-general-topright.blp'> <!-- file='interface/spellbook/ui-spellbookpanel-topright.blp'> -->
+          <Size>
+            <AbsDimension x="180" y="300"/>
+          </Size>
+          <Anchors>
+            <Anchor point="TOPRIGHT">
+              <Offset>
+                <AbsDimension x="0" y="0"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+        <Texture level='0' file='interface/paperdollinfoframe/ui-character-general-bottomleft.blp'> <!-- file='interface/spellbook/ui-spellbookpanel-botleft.blp'> -->
+          <Size>
+            <AbsDimension x="300" y="300"/>
+          </Size>
+          <Anchors>
+            <Anchor point="BOTTOMLEFT">
+              <Offset>
+                <AbsDimension x="0" y="0"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+        <Texture level='0' file='interface/paperdollinfoframe/ui-character-general-bottomright.blp'> <!--file='interface/spellbook/ui-spellbookpanel-botright.blp'> -->
+          <Size>
+            <AbsDimension x="180" y="300"/>
+          </Size>
+          <Anchors>
+            <Anchor point="BOTTOMRIGHT">
+              <Offset>
+                <AbsDimension x="0" y="0"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <Layer level="BACKGROUND">
+        <Texture name="$parent_PortraitTexture">
+          <Size x="68" y="68"/>
+          <Anchors>
+            <Anchor point="TOPLEFT">
+              <Offset>
+                <AbsDimension x="8" y="-8"/>
+              </Offset>
+            </Anchor>
+          </Anchors>
+        </Texture>
+      </Layer>
+      <!--frame title-->
+      <Layer level="ARTWORK">
+        <FontString name="$parent_Title" font="Fonts\FRIZQT__.TTF" text="|cffffcc00 RA Warlock Manager |r">          
+          <FontHeight val="14"/>
+          <Anchors>
+            <Anchor point="TOP">
+              <offset x="0" y="-22"/>
+            </Anchor>
+          </Anchors>
+        </FontString>
+      </Layer>
+    </Layers>
+    <!-- main frame close button -->
+    <Frames>     
+      <Button name="$parentCloseButton" inherits="UIPanelCloseButton">
+	  <Size x="45" y="40"/>
+        <Anchors>
+          <Anchor point="CENTER" relativeTo="RAWarlocks" relativePoint="TOPRIGHT">
+            <Offset>
+              <AbsDimension x="-64" y="-28"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            RAWarlocks:Hide()
+          </OnClick>
+        </Scripts>
+      </Button>
+      <!--main frame tab buttons-->
+      <Button name="$parentTab1" inherits="CharacterFrameTabButtonTemplate" id="1" text="Curses">
+        <Anchors>
+          <Anchor point="CENTER" relativePoint="BOTTOMLEFT">
+            <Offset>
+              <AbsDimension x="80" y="75"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            PanelTemplates_SetTab(RAWarlocks, 1);	
+            RAWarlocks_RosterFrame:Show()
+            RAWarlocks_SoulstoneFrame:Hide()
+            RAWarlocks_SummonsFrame:Hide()
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parentTab2" inherits="CharacterFrameTabButtonTemplate" id="2" text="SoulStones">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentTab1" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="-16" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick> 
+            PanelTemplates_SetTab(RAWarlocks, 2);
+            RAWarlocks_RosterFrame:Hide()	
+            RAWarlocks_SoulstoneFrame:Show()
+            RAWarlocks_SummonsFrame:Hide()
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parentTab3" inherits="CharacterFrameTabButtonTemplate" id="3" text="Summons">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentTab2" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="-16" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            PanelTemplates_SetTab(RAWarlocks, 3);	
+            RAWarlocks_RosterFrame:Hide()
+            RAWarlocks_SoulstoneFrame:Hide()
+            RAWarlocks_SummonsFrame:Show()
+          </OnClick>
+        </Scripts>
+      </Button>
+      <Button name="$parentTab4" inherits="CharacterFrameTabButtonTemplate" id="4" text="Options">
+        <Anchors>
+          <Anchor point="LEFT" relativeTo="$parentTab3" relativePoint="RIGHT">
+            <Offset>
+              <AbsDimension x="-16" y="0"/>
+            </Offset>
+          </Anchor>
+        </Anchors>
+        <Scripts>
+          <OnClick>
+            PanelTemplates_SetTab(RAWarlocks, 4);	
+            RAWarlocks_RosterFrame:Hide()
+            RAWarlocks_SoulstoneFrame:Hide()
+            RAWarlocks_SummonsFrame:Hide()
+          </OnClick>
+        </Scripts>
+      </Button>
+      <!--Tab Button Frames-->
+      <Frame name="$parent_RosterFrame">
+        <Anchors>
+          <Anchor point="TOPLEFT"/>
+          <Anchor point="BOTTOMRIGHT"/>
+        </Anchors>
+        <Scripts>
+          <OnShow>
+            RAW_RosterFrameOnShow()
+          </OnShow>
+        </Scripts>
+      </Frame>
+      <Frame name="$parent_SoulstoneFrame" >
+        <Anchors>
+          <Anchor point="TOPLEFT"/>
+          <Anchor point="BOTTOMRIGHT"/>
+        </Anchors>
+        <Scripts>
+          <OnShow>
+            RAW_SoulstoneFrameOnShow()
+          </OnShow>
+        </Scripts>
+      </Frame>
+      <Frame name="$parent_SummonsFrame">
+        <Anchors>
+          <Anchor point="TOPLEFT"/>
+          <Anchor point="BOTTOMRIGHT"/>
+        </Anchors>
+        <Scripts>
+          <OnShow>
+            RAW_SummonsFrameOnShow()
+          </OnShow>
+        </Scripts>
+      </Frame>
+      <Frame name="$parent_OptionsFrame">
+        <Anchors>
+          <Anchor point="TOPLEFT"/>
+          <Anchor point="BOTTOMRIGHT"/>
+        </Anchors>
+        <Scripts>
+        </Scripts>
+      </Frame>
+    </Frames>
+    <Scripts>
+      <OnLoad>
+        self:SetMovable(true)
+        self:EnableMouse(true)
+        self:RegisterForDrag("LeftButton")
+        self:SetScript("OnDragStart", self.StartMoving)
+        self:SetScript("OnDragStop", self.StopMovingOrSizing)
+        PanelTemplates_SetNumTabs(RAWarlocks, 4);
+        PanelTemplates_SetTab(RAWarlocks, 1);
+        <!-- https://wowwiki.fandom.com/wiki/Make_Frames_Closable_With_the_%22Esc%22_Key -->
+        table.insert(UISpecialFrames, "RAWarlocks");
+      </OnLoad>
+      <OnShow>
+        RAWarlocks_RosterFrame:Show();
+        RAWarlocks_SoulstoneFrame:Hide();
+        RAWarlocks_SummonsFrame:Hide();
+        PanelTemplates_SetTab(RAWarlocks, 1);
+        SetPortraitTexture(_G[self:GetName().."_PortraitTexture"], 'player');
+      </OnShow>
+      <OnHide>
+      </OnHide>
+      <OnEvent>
+      </OnEvent>
+    </Scripts>
+  </Frame>
+</Ui>

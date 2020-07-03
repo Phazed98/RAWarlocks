@@ -1,0 +1,32 @@
+## Interface: 11303
+## Title: RAWarlocks
+## Notes: Manages Aspects of Warlock Raiding
+## Author: Dephendedra @ Grobbulus
+## Version: 0.0.1
+## OptionalDeps: Ace3
+## SavedVariables: RAWarlocksDB
+## SavedVariablesPerCharacter: 
+
+#Libs
+embeds.xml
+
+#Types
+Types.lua
+
+#EventHandler
+EventHandler.lua
+
+#Core
+Core.lua
+
+#UI XML
+RAWarlocksUI.xml
+
+#UI Lua
+RAWarlocksUI.lua
+CurseAssignmentsFrame.lua
+SoulstoneFrame.lua
+SummonsFrame.lua
+
+#Minimap
+MinimapIcon.lua
