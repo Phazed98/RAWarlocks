@@ -100,8 +100,6 @@ function RAW_Core:FindAllWarlocks()
 
 		if RAW.Debug or (RaiderClass == "Warlock") then
 
-			RAW_Core:Print(RaiderName)
-
 			local bExists = false;
 
 			-- Iterate the Warlock lsit and match via name
@@ -129,8 +127,11 @@ function RAW_Core:FindAllWarlocks()
 	-- Remove Any Warlocks that may have left the raid
 	RAW_Core:RemoveDirtyWarlocks()
 
-	-- Refreshes the UI to Match the Data
-	RAW_WarlockList:UpdateWarlockListViewItems()
+	--If we have only local unedited data we should draw it at least once
+	if (RAW_Core.HasValidData == false) then
+		-- Refreshes the UI to Match the Data
+		RAW_WarlockList:UpdateWarlockListViewItems()
+	end
 
 end
 

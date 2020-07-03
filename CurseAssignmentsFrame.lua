@@ -13,6 +13,7 @@ RAW.UI.RosterScrollFrame.MessageRaidButton = CreateFrame("BUTTON", "RAW_MessageR
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetPoint("TOPLEFT", 200, 25)
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetText("Send To Raid")
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetSize(100, 22)
+
 -- TODO Move this to its own function
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetScript("OnClick", function()
 

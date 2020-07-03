@@ -4,7 +4,7 @@ RAW.addon_name = "RA Warlocks"
 
 RAW.Types = {}
 
-RAW.Debug = false
+RAW.Debug = true
 
 -- Curses Sorted by Priority
 RAW.Types.Curses =

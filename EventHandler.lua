@@ -96,6 +96,9 @@ function RAW_EventHandler:Event_GroupJoined()
 		RAW_Core.AddonUserList[k] = nil
 	end
 
+	--If we Just joined the group, we dont have valid data
+	RAW_Core.HasValidData = false
+
 	-- When Joining a Group Send Your Spec To the Others
 	RAW_Core:SendSpec()
 
