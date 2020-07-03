@@ -33,7 +33,7 @@ RAW.Types.SpellIcons =
 	["Curse of Doom"]			= 136122,
 	["Curse of Tongues"]		= 136140,
 	["Curse of Exhaustion"]		= 136162,
-	["Curse of Santa"]			= 133169,
+	--["Curse of Santa"]			= 133169,
 	["No Curse"] = 0,
 }
 
