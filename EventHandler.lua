@@ -23,6 +23,7 @@ function RAW_EventHandler:Comm_WarlockSpec(Prefix, Message, Distribution, Sender
 				
 				RAW_Core:DebugPrint("Recieved Warlock Spec for "..Warlock.Name)
 				Warlock.Spec = SpecInfo.SpecString
+				break
 			end
 		end
 	end
