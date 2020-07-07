@@ -232,6 +232,7 @@
         RAWarlocks_RosterFrame:Show();
         RAWarlocks_SoulstoneFrame:Hide();
         RAWarlocks_SummonsFrame:Hide();
+        RAWarlocks_OptionsFrame:Hide()
         PanelTemplates_SetTab(RAWarlocks, 1);
         SetPortraitTexture(_G[self:GetName().."_PortraitTexture"], 'player');
       </OnShow>

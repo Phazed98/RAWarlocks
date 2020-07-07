@@ -91,7 +91,7 @@ function RAW_Core:FindAllWarlocks()
 		-- Grab the raider info from the WOWAPI
 		local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(Index);
 
-		if true or (RaiderClass == "Warlock") then
+		if (RaiderClass == "Warlock") then
 
 			local bExists = false;
 
@@ -153,7 +153,7 @@ function RAW_Core:FindAllSoulstones()
 
 				local name, icon, count, debuffType, duration, expirationTime, source, isStealable, nameplateShowPersonal, spellId = UnitBuff(RaiderName,BuffIndex)
 
-				if  name == "Soulstone Resurrection" then
+				if name == "Soulstone Resurrection" then
 					local SoulstonedInfo = {}
 					-- Whos SSd
 					SoulstonedInfo.Name = RaiderName
