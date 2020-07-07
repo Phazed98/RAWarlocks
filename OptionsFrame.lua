@@ -1,6 +1,6 @@
 local ADDON_NAME, RAW = ...
 
-RAW_Summons = {}
+RAW_Options = {}
 
 -- Frame for the summons tab
 RAW.UI.OptionsFrame = CreateFrame("SCROLLFRAME", "RAW_OptionsFrame", RAWarlocks_OptionsFrame)
