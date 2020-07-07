@@ -41,7 +41,8 @@ function RAW_EventHandler:Comm_WarlockConfigsDump(Prefix, Message, Distribution,
 	
 		RAW_Core:DebugPrint("Recieved Bulk Warlock Info From: "..Sender)
 		RAW_Core.WarlockList = UpdatedWarlocks
-		
+
+		--We recieved Valid Data from a raid member
 		RAW_Core.HasValidData = true
 	end
 
@@ -50,7 +51,6 @@ end
 
 -- Handles the Event when a new users joins
 function RAW_EventHandler:Comm_AddonUserAnnounced(Prefix, Message, Distribution, Sender)
-	RAW_Core.AddonUserList[Sender] = Sender -- Keep Track of Other Addon Users
 end
 
 -- Handles Comm Message Recieved Indicating a New Summon Session has Started
@@ -87,14 +87,13 @@ function RAW_EventHandler:Event_RaidRosterUpdate()
  	-- When the group changes, send a message so others see who has the addon
 	local MessageString = "Hello" -- Todo: Send Usefull Information, Or Remove Entirely
 	RAW_Core:SendCommMessage("raw-Announce", MessageString, "RAID", nil, "NORMAL")
+
+	-- Send the Spec Via Addon Message
+	RAW_Core:SendSpec()
 end
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_GroupJoined()
-	--Clear out any list of addon users we have
-	for k, AddonUser in ipairs(RAW_Core.AddonUserList) do
-		RAW_Core.AddonUserList[k] = nil
-	end
 
 	--If we Just joined the group, we dont have valid data
 	RAW_Core.HasValidData = false
@@ -107,6 +106,10 @@ function RAW_EventHandler:Event_GroupJoined()
 	RAW_Core:SendCommMessage("raw-Request", MessageString, "RAID", nil, "NORMAL")
 end
 
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_EnteredCombat()
+	RAWarlocks:Hide()
+end
 
 ----------------------------------------------------------
 -- CHAT MESSAGE HANDLERS

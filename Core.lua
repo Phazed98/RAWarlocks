@@ -18,7 +18,7 @@ RAW_Core.SoulstonedList = {}
 -- List of Warlocks in the raid
 RAW_Core.AddonUserList = {}
 
--- List of Warlocks in the raid
+-- If the Warlock data we have is valid
 RAW_Core.HasValidData = false
 
 --Debug Print That Doesnt Print In Public Builds
@@ -67,6 +67,7 @@ function RAW_Core:OnEnable()
 	RAW_EventHandler:RegisterEvent("GROUP_JOINED", "Event_GroupJoined")
 	RAW_EventHandler:RegisterEvent("PLAYER_LOGIN", "Event_GroupJoined")
 	RAW_EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD", "Event_GroupJoined")
+	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_DISABLED", "Event_EnteredCombat")
 
 	-- Channel Messages
 	RAW_EventHandler:RegisterEvent("CHAT_MSG_RAID", "Message_Raid")
@@ -83,14 +84,6 @@ end
 -- Called Whenever the Panel is opened, Will add any new Warlocks, and Refresh the UI
 function RAW_Core:FindAllWarlocks()	
 
-	-- Go Through the Current List of Warlocks, mark them dirty, if they arent still in raid they will be removed from the list
-	for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
-		ExistingWarlock.bDirty = true
-		if ExistingWarlock.Name == UnitName("player") then
-			ExistingWarlock.Role = RAW_Core.LocalRole
-		end
-	end
-	
 	local WarlockIndex = 1
 
 	-- Loop over the group members, grab any warlocks and add them to RAW_Core.WarlockList
@@ -98,27 +91,33 @@ function RAW_Core:FindAllWarlocks()
 		-- Grab the raider info from the WOWAPI
 		local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(Index);
 
-		if RAW.Debug or (RaiderClass == "Warlock") then
+		if true or (RaiderClass == "Warlock") then
 
 			local bExists = false;
 
-			-- Iterate the Warlock lsit and match via name
+			-- Iterate the Warlock list and match via name
 			for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
 				if ExistingWarlock.Name == RaiderName then
 					ExistingWarlock.bDirty = false
 					bExists = true
 				end
 			end
-
+			
 			-- Add a new Warlock to the list
 			if not bExists then
 				local Warlock = {}
 				Warlock.Name = RaiderName
 				Warlock.bDirty = false
-				Warlock.Curse = RAW.Types.Curses[9].Text
+
+				-- Assign Basic Curses, These may get overriden if someone sends data
+				if RAW_Core.HasValidData ~= true and #RAW_Core.WarlockList+1 <= 3 then
+					Warlock.Curse = RAW.Types.Curses[#RAW_Core.WarlockList+1].Text
+				else
+					Warlock.Curse = RAW.Types.Curses[9].Text
+				end
 				Warlock.Spec = "(0/0/0)"
 				Warlock.CanCorruption = false
-
+			
 				RAW_Core.WarlockList[#RAW_Core.WarlockList + 1] = Warlock
 			end
 		end
@@ -154,12 +153,12 @@ function RAW_Core:FindAllSoulstones()
 
 				local name, icon, count, debuffType, duration, expirationTime, source, isStealable, nameplateShowPersonal, spellId = UnitBuff(RaiderName,BuffIndex)
 
-				if  RAW.Debug or name == "Soulstone Resurrection" then
+				if  name == "Soulstone Resurrection" then
 					local SoulstonedInfo = {}
 					-- Whos SSd
 					SoulstonedInfo.Name = RaiderName
 
-					SourceString = "UnKnown"
+					SourceString = "Unknown"
 					if (source ~= nil) then
 						SourceName, SourceRealm = UnitFullName(source)
 						SourceString = SourceName
@@ -187,6 +186,8 @@ function RAW_Core:FindAllSoulstones()
 end
 
 function RAW_RosterFrameOnShow()
+	-- Send the Spec Via Addon Message
+	RAW_Core:SendSpec()
 
 	RAW_Core:FindAllWarlocks()
 end
@@ -197,6 +198,9 @@ function RAW_SoulstoneFrameOnShow()
 end
 
 function RAW_SummonsFrameOnShow()
+end
+
+function RAW_OptionsFrameOnShow()
 end
 
 -- Whispers the Warlock thier specific assignment
@@ -240,14 +244,12 @@ function RAW_Core:SendSpec()
 
 	-- Demo Talents
 	for i = 1, GetNumTalents(2) do
-		--print(i, j, GetTalentInfo(i, j))
 		local name, texture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo(2,i)
 		DemoNum = DemoNum + rank
 	end
 
 	-- Destro Talents
 	for i = 1, GetNumTalents(3) do
-		--print(i, j, GetTalentInfo(i, j))
 		local name, texture, tier, column, rank, maxRank, isExceptional, available = GetTalentInfo(3,i)
 		DestroNum = DestroNum + rank
 	end

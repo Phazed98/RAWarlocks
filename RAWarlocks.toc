@@ -27,6 +27,7 @@ RAWarlocksUI.lua
 CurseAssignmentsFrame.lua
 SoulstoneFrame.lua
 SummonsFrame.lua
+OptionsFrame.lua
 
 #Minimap
 MinimapIcon.lua

@@ -108,10 +108,11 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            PanelTemplates_SetTab(RAWarlocks, 1);	
+            PanelTemplates_SetTab(RAWarlocks, 1);
             RAWarlocks_RosterFrame:Show()
             RAWarlocks_SoulstoneFrame:Hide()
             RAWarlocks_SummonsFrame:Hide()
+            RAWarlocks_OptionsFrame:Hide()
           </OnClick>
         </Scripts>
       </Button>
@@ -124,11 +125,12 @@
           </Anchor>
         </Anchors>
         <Scripts>
-          <OnClick> 
+          <OnClick>
             PanelTemplates_SetTab(RAWarlocks, 2);
-            RAWarlocks_RosterFrame:Hide()	
+            RAWarlocks_RosterFrame:Hide()
             RAWarlocks_SoulstoneFrame:Show()
             RAWarlocks_SummonsFrame:Hide()
+            RAWarlocks_OptionsFrame:Hide()
           </OnClick>
         </Scripts>
       </Button>
@@ -142,10 +144,11 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            PanelTemplates_SetTab(RAWarlocks, 3);	
+            PanelTemplates_SetTab(RAWarlocks, 3);
             RAWarlocks_RosterFrame:Hide()
             RAWarlocks_SoulstoneFrame:Hide()
             RAWarlocks_SummonsFrame:Show()
+            RAWarlocks_OptionsFrame:Hide()
           </OnClick>
         </Scripts>
       </Button>
@@ -159,10 +162,11 @@
         </Anchors>
         <Scripts>
           <OnClick>
-            PanelTemplates_SetTab(RAWarlocks, 4);	
+            PanelTemplates_SetTab(RAWarlocks, 4);
             RAWarlocks_RosterFrame:Hide()
             RAWarlocks_SoulstoneFrame:Hide()
             RAWarlocks_SummonsFrame:Hide()
+            RAWarlocks_OptionsFrame:Show()
           </OnClick>
         </Scripts>
       </Button>
@@ -206,6 +210,9 @@
           <Anchor point="BOTTOMRIGHT"/>
         </Anchors>
         <Scripts>
+          <OnShow>
+            RAW_OptionsFrameOnShow()
+          </OnShow>
         </Scripts>
       </Frame>
     </Frames>
