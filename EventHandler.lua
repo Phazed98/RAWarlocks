@@ -71,6 +71,9 @@ function RAW_EventHandler:Comm_RequestInfo(Prefix, Message, Distribution, Sender
  	-- Send your apec out to others
 	RAW_Core:SendSpec()
 
+	-- Update the list so we dont send dirty info
+	RAW_Core:FindAllWarlocks()	
+
 	if (RAW_Core.HasValidData) then
 		RAW_Core:SendAllWarlockData()
 	end
@@ -90,10 +93,20 @@ function RAW_EventHandler:Event_RaidRosterUpdate()
 
 	-- Send the Spec Via Addon Message
 	RAW_Core:SendSpec()
+
+	RAW_Core:FindAllWarlocks()
 end
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_GroupJoined()
+	
+	RAW.UI.OptionsFrame.DebugCheckBox:SetChecked(RAW_Options.Debug)
+
+	if (RAW_Options.Debug) then
+		RAW.UI.RosterScrollFrame.TestFeatureButton:Show()
+	else
+		RAW.UI.RosterScrollFrame.TestFeatureButton:Hide()
+	end
 
 	--If we Just joined the group, we dont have valid data
 	RAW_Core.HasValidData = false
@@ -107,8 +120,39 @@ function RAW_EventHandler:Event_GroupJoined()
 end
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_Login()
+	
+	--Update the UI Checkbox to match the stored options
+	RAW.UI.OptionsFrame.DebugCheckBox:SetChecked(RAW_Options.Debug)
+	
+	--Fires on reload, so if were in a group we should pretend like we jsut joined to refresh all our data
+	RAW_EventHandler:Event_GroupJoined()
+end
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_EnteredCombat()
 	RAWarlocks:Hide()
+end
+
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_SpellCastStarted(Unit, Target, CastGUID, spellID)
+	RAW_Core:DebugPrint("SpellCast Started")
+end
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_SpellCastSucceded(Unit,Target, CastGUID, spellID)
+	RAW_Core:DebugPrint("SpellCast Succeded")
+	end
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_SpellCastFailed(Unit,Target, CastGUID, spellID)
+	RAW_Core:DebugPrint("SpellCast Failed")
+end
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_SpellCastSent(Unit, Target, CastGUID, spellID)
+	RAW_Core:DebugPrint("SpellCast Sent")
 end
 
 ----------------------------------------------------------

@@ -218,6 +218,7 @@
     </Frames>
     <Scripts>
       <OnLoad>
+        RAW_Core:OnLoad()
         self:SetMovable(true)
         self:EnableMouse(true)
         self:RegisterForDrag("LeftButton")

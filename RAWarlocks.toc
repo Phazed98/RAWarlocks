@@ -1,10 +1,10 @@
-## Interface: 11303
+## Interface: 11304
 ## Title: RAWarlocks
 ## Notes: Manages Aspects of Warlock Raiding
 ## Author: Dephendedra @ Grobbulus
 ## Version: 0.0.1
 ## OptionalDeps: Ace3
-## SavedVariables: RAWarlocksDB
+## SavedVariables: RAWarlocksDB, RAW_Options
 ## SavedVariablesPerCharacter: 
 
 #Libs

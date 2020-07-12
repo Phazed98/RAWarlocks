@@ -59,15 +59,12 @@ end)
 
 
 -- Button to message the Warlocks via Whisper
-if (RAW.Debug) then
-	RAW.UI.RosterScrollFrame.TestFeatureButton = CreateFrame("BUTTON", "RAW_TestFeatureButton", RAW.UI.RosterScrollFrame, "UIPanelButtonTemplate")
-	RAW.UI.RosterScrollFrame.TestFeatureButton:SetPoint("TOPLEFT", 100, 25)
-	RAW.UI.RosterScrollFrame.TestFeatureButton:SetText("Test")
-	RAW.UI.RosterScrollFrame.TestFeatureButton:SetSize(100, 22)
-	RAW.UI.RosterScrollFrame.TestFeatureButton:SetScript("OnClick", function()
-
-	end)
-end
+RAW.UI.RosterScrollFrame.TestFeatureButton = CreateFrame("BUTTON", "RAW_TestFeatureButton", RAW.UI.RosterScrollFrame, "UIPanelButtonTemplate")
+RAW.UI.RosterScrollFrame.TestFeatureButton:SetPoint("TOPLEFT", 100, 25)
+RAW.UI.RosterScrollFrame.TestFeatureButton:SetText("Test")
+RAW.UI.RosterScrollFrame.TestFeatureButton:SetSize(100, 22)
+RAW.UI.RosterScrollFrame.TestFeatureButton:SetScript("OnClick", function()
+end)
 
 -- Scroll Bar used to navigate the Warlock list
 RAW.UI.RosterScrollBar = CreateFrame("Slider", "RAW_RosterScrollBar", RAW.UI.RosterScrollFrame, "UIPanelScrollBarTemplate")
@@ -113,7 +110,6 @@ function RAW.UI.BuildWarlockListView()
 		WarlockInfoFrameEntry.CheckBox:SetScript("OnClick", function()
 			if (RAW_Core.WarlockList[i] ~= nil) then
 				RAW_Core.WarlockList[i].CanCorruption = WarlockInfoFrameEntry.CheckBox:GetChecked()
-				--RAW_Core:SendWarlockData(RAW_Core.WarlockList[i])
 				RAW_Core:SendAllWarlockData()
 			end
 		end);
@@ -167,7 +163,6 @@ function RAW.UI.BuildWarlockListView()
 				info.func = function()
 					if (RAW_Core.WarlockList[i] ~= nil) then
 						RAW_Core.WarlockList[i].Curse = Curse.Text
-						--RAW_Core:SendWarlockData(RAW_Core.WarlockList[i])
 						RAW_Core:SendAllWarlockData()
 					end
 				end

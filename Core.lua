@@ -23,7 +23,7 @@ RAW_Core.HasValidData = false
 
 --Debug Print That Doesnt Print In Public Builds
 function RAW_Core:DebugPrint(Value)
-	if (RAW.Debug) then
+	if (RAW_Options.Debug) then
 		RAW_Core:Print(Value)
 	end
 end
@@ -64,10 +64,18 @@ function RAW_Core:OnEnable()
 
 	-- Events
 	RAW_EventHandler:RegisterEvent("GROUP_ROSTER_UPDATE", "Event_RaidRosterUpdate")
+	
 	RAW_EventHandler:RegisterEvent("GROUP_JOINED", "Event_GroupJoined")
-	RAW_EventHandler:RegisterEvent("PLAYER_LOGIN", "Event_GroupJoined")
-	RAW_EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD", "Event_GroupJoined")
+
+	RAW_EventHandler:RegisterEvent("PLAYER_LOGIN", "Event_Login")
+	RAW_EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD", "Event_Login")
+
 	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_DISABLED", "Event_EnteredCombat")
+	
+	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", "Event_SpellCastSucceded")
+	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_START", "Event_SpellCastStarted")
+	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_FAILED", "Event_SpellCastFailed")
+	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_SENT", "Event_SpellCastSent")
 
 	-- Channel Messages
 	RAW_EventHandler:RegisterEvent("CHAT_MSG_RAID", "Message_Raid")
@@ -81,6 +89,12 @@ end
 function RAW_Core:OnDisable()
 end
 
+-- Called when the addon is disabled
+function RAW_Core:OnLoad()
+
+
+end
+
 -- Called Whenever the Panel is opened, Will add any new Warlocks, and Refresh the UI
 function RAW_Core:FindAllWarlocks()	
 
@@ -91,14 +105,13 @@ function RAW_Core:FindAllWarlocks()
 		-- Grab the raider info from the WOWAPI
 		local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(Index);
 
-		if (RaiderClass == "Warlock") then
+		if true or (RaiderClass == "Warlock") then
 
 			local bExists = false;
 
 			-- Iterate the Warlock list and match via name
 			for k, ExistingWarlock in ipairs(RAW_Core.WarlockList) do
 				if ExistingWarlock.Name == RaiderName then
-					ExistingWarlock.bDirty = false
 					bExists = true
 				end
 			end
@@ -107,7 +120,6 @@ function RAW_Core:FindAllWarlocks()
 			if not bExists then
 				local Warlock = {}
 				Warlock.Name = RaiderName
-				Warlock.bDirty = false
 
 				-- Assign Basic Curses, These may get overriden if someone sends data
 				if RAW_Core.HasValidData ~= true and #RAW_Core.WarlockList+1 <= 3 then
@@ -124,7 +136,7 @@ function RAW_Core:FindAllWarlocks()
 	end
 
 	-- Remove Any Warlocks that may have left the raid
-	RAW_Core:RemoveDirtyWarlocks()
+	RAW_Core:RemoveMissingWarlocks()
 
 	--If we have only local unedited data we should draw it at least once
 	if (RAW_Core.HasValidData == false) then
@@ -217,13 +229,31 @@ function RAW_Core:WhisperWarlockCurse(Warlock)
 	end
 end
 
--- Clears warlocks marked dirty from the WarlocList
-function RAW_Core:RemoveDirtyWarlocks()
+-- Clears warlocksno longer in the raid from the Warlock List
+function RAW_Core:RemoveMissingWarlocks()
+
+	RAW_Core:DebugPrint("Removing Missing Warlocks")
 
 	-- Iterate Backwords through list and remove all Dirty Entries
-	for Index = #RAW_Core.WarlockList, 1, -1 do
-		if (RAW_Core.WarlockList[Index].bDirty) then
-			table.remove(RAW_Core.WarlockList, Index)
+	for WarlockIndex = #RAW_Core.WarlockList, 1, -1 do
+		
+		local InRaid = false
+
+		-- Loop over the group members, grab any warlocks and add them to RAW_Core.WarlockList
+		for RaiderIndex = 1, GetNumGroupMembers(), 1  do
+
+			-- Grab the raider info from the WOWAPI
+			local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(RaiderIndex);
+
+			if (RaiderName == RAW_Core.WarlockList[WarlockIndex].Name) then
+				InRaid = true
+				break
+			end
+		end
+
+		if not InRaid then
+			RAW_Core:DebugPrint("Removing: "..RAW_Core.WarlockList[WarlockIndex].Name)
+			table.remove(RAW_Core.WarlockList, WarlockIndex)
 		end
 	end
 end
