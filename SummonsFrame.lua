@@ -14,9 +14,7 @@ RAW.UI.SummonsFrame.MessageRaidButton:SetPoint("TOPLEFT", 100, 25)
 RAW.UI.SummonsFrame.MessageRaidButton:SetText("Start Summon Session")
 RAW.UI.SummonsFrame.MessageRaidButton:SetSize(150, 22)
 RAW.UI.SummonsFrame.MessageRaidButton:SetScript("OnClick", function()
-	SendChatMessage(" --- Starting Summons to "..GetZoneText().." - ".. GetMinimapZoneText() , "RAID", nil, nil)
-	SendChatMessage(" --- Type X to Be Added To The Queue", "RAID", nil, nil)
-	SendChatMessage(" --- Brought to you by your local Fel Union", "RAID", nil, nil)	
+	SendChatMessage(RAW_Options.SummonSessionText, "RAID", nil, nil)
 	RAW_Core:SendCommMessage("raw-NewSession", "SessionStart", "RAID", nil, "BULK")
 end)
 
@@ -114,7 +112,8 @@ function RAW_Summons:UpdateSummonListView()
 
 			-- Build the Macro String, Wow API has a limitation of requireing a SecureButtonTemplate to be clicked to perform some actions
 			-- One action is UseMacro which lets us Target and Cast Ritual of Summoning, Than Announce in Raid which the EventHandler looks for to remove the item from the list
-			local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  Ritual of Summoning" .."\n/Script if IsCurrentSpell(698) then SendChatMessage(\"RAW Summoning "..SummonInfo.Name.."\", \"RAID\") end"
+			local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  Ritual of Summoning"
+			--local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  Ritual of Summoning" .."\n/Script if IsCurrentSpell(698) then SendChatMessage(\"RAW Summoning "..SummonInfo.Name.."\", \"RAID\") end"
 			Entry.SummonButton:SetAttribute("macrotext", MacroString);
 
 			-- Show current entry

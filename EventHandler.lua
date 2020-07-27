@@ -80,6 +80,21 @@ function RAW_EventHandler:Comm_RequestInfo(Prefix, Message, Distribution, Sender
 
 end
 
+-- Handles Comm Message Recieved Indicating a New Summon Session has Started
+function RAW_EventHandler:Comm_SummonStarted(Prefix, Message, Distribution, Sender)
+
+	local TargetName = Message
+	for k, Target in ipairs(RAW_Core.SummonList) do
+		if (Target.Name == TargetName) then
+			Target.Status = "InProgress"
+			break
+		end
+	end
+	
+	--Refresh the view
+	RAW_Summons:UpdateSummonListView()
+end
+
 ------------------------------------------------
 -- EVENT HANDLERS
 ------------------------------------------------
@@ -121,7 +136,10 @@ end
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_Login()
-	
+	--Fill out the Custom Summon text Boxes
+	RAW.UI.OptionsFrame.SummonSessionTextBox:SetText(RAW_Options.SummonSessionText)
+	RAW.UI.OptionsFrame.SummonChatTextBox:SetText(RAW_Options.SummonChatText)
+
 	--Update the UI Checkbox to match the stored options
 	RAW.UI.OptionsFrame.DebugCheckBox:SetChecked(RAW_Options.Debug)
 	
@@ -136,23 +154,38 @@ end
 
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
-function RAW_EventHandler:Event_SpellCastStarted(Unit, Target, CastGUID, spellID)
-	RAW_Core:DebugPrint("SpellCast Started")
-end
+function RAW_EventHandler:Event_SpellCastStarted(IDString, Source, CastGUID, SpellID)
+	name, rank, icon, castTime, minRange, maxRange, spellId = GetSpellInfo(SpellID)
 
--- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
-function RAW_EventHandler:Event_SpellCastSucceded(Unit,Target, CastGUID, spellID)
-	RAW_Core:DebugPrint("SpellCast Succeded")
+	if Source == "player" and SpellID == 698 then
+		RAW_Core:DebugPrint("IDString "..IDString.." Source "..Source.." CastGUID "..CastGUID.." SpellID "..SpellID .." SpellName "..name)
+		SendChatMessage(RAW_Options.SummonChatText, "RAID", nil, nil)
+	
+		local MessageString = UnitName("playerTarget")
+		RAW_Core:SendCommMessage("raw-SummonStart", MessageString, "RAID", nil, "NORMAL")
 	end
-
--- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
-function RAW_EventHandler:Event_SpellCastFailed(Unit,Target, CastGUID, spellID)
-	RAW_Core:DebugPrint("SpellCast Failed")
 end
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
-function RAW_EventHandler:Event_SpellCastSent(Unit, Target, CastGUID, spellID)
-	RAW_Core:DebugPrint("SpellCast Sent")
+function RAW_EventHandler:Event_SpellCastSucceded(IDString, Source, CastGUID, SpellID)
+	name, rank, icon, castTime, minRange, maxRange, spellId = GetSpellInfo(SpellID)
+	if Source == "player" and SpellID == 698 then
+		RAW_Core:DebugPrint("IDString "..IDString.."\nSource "..Source.."\nCastGUID "..CastGUID.."\nSpellID "..SpellID .."\nSpellName "..name)
+	end
+end
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_SpellCastFailed(IDString, Source, CastGUID, SpellID)
+	name, rank, icon, castTime, minRange, maxRange, spellId = GetSpellInfo(SpellID)
+	if Source == "player" and SpellID == 698 then
+		RAW_Core:DebugPrint("IDString "..IDString.."\nSource "..Source.."\nCastGUID "..CastGUID.."\nSpellID "..SpellID .."\nSpellName "..name)
+	end
+end
+
+-- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
+function RAW_EventHandler:Event_SpellCastSent(UnitTarget, CastGUID, spellID)
+	--RAW_Core:DebugPrint("SpellCast Sent")
+	--RAW_Core:DebugPrint("\nUnitTarget "..UnitTarget.."\nCastGUID "..CastGUID.."\nSpellID "..spellID)
 end
 
 ----------------------------------------------------------
@@ -212,23 +245,23 @@ function RAW_EventHandler:Message_Raid(Channel, Message, Sender, arg11, arg12)
 	end
 
 	--Messages sent to Raid(Not Via SendAddonMessage) will prefix with RAW so we can pick them up here
-	if (KeyWord == "RAW")
-	then
-		local Action = MessageIterator()
-		if (Action == "Summoning") then
-		
-			local TargetName = MessageIterator()
-			for k, Target in ipairs(RAW_Core.SummonList) do
-				if (Target.Name == TargetName) then
-					Target.Status = "Summoned"
-					break
-				end
-			end
-
-			--Refresh the view
-			RAW_Summons:UpdateSummonListView()
-		end
-	end
+	--if (KeyWord == "RAW")
+	--then
+	--	local Action = MessageIterator()
+	--	if (Action == "Summoning") then
+	--	
+	--		local TargetName = MessageIterator()
+	--		for k, Target in ipairs(RAW_Core.SummonList) do
+	--			if (Target.Name == TargetName) then
+	--				Target.Status = "Summoned"
+	--				break
+	--			end
+	--		end
+	--
+	--		--Refresh the view
+	--		RAW_Summons:UpdateSummonListView()
+	--	end
+	--end
 end
 
 ------------------------------------------

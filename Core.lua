@@ -61,6 +61,8 @@ function RAW_Core:OnEnable()
 	RAW_EventHandler:RegisterComm("raw-NewSession", "Comm_NewSession")
 	RAW_EventHandler:RegisterComm("raw-UserList", "Comm_UserList")
 	RAW_EventHandler:RegisterComm("raw-Request", "Comm_RequestInfo")
+	RAW_EventHandler:RegisterComm("raw-SummonStart", "Comm_SummonStarted")
+	RAW_EventHandler:RegisterComm("raw-SummonSent", "Comm_SummonSent")
 
 	-- Events
 	RAW_EventHandler:RegisterEvent("GROUP_ROSTER_UPDATE", "Event_RaidRosterUpdate")
@@ -75,6 +77,8 @@ function RAW_Core:OnEnable()
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", "Event_SpellCastSucceded")
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_START", "Event_SpellCastStarted")
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_FAILED", "Event_SpellCastFailed")
+	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_INTERRUPTED", "Event_SpellCastFailed")
+
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_SENT", "Event_SpellCastSent")
 
 	-- Channel Messages
@@ -105,7 +109,7 @@ function RAW_Core:FindAllWarlocks()
 		-- Grab the raider info from the WOWAPI
 		local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(Index);
 
-		if true or (RaiderClass == "Warlock") then
+		if (RaiderClass == "Warlock") then
 
 			local bExists = false;
 
