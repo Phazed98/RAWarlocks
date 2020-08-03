@@ -229,7 +229,7 @@ function RAW_EventHandler:Message_Raid(Channel, Message, Sender, arg11, arg12)
 				--Grab the raider info from the WOWAPI
 				local RaiderName, RaiderRank, RaiderSubgroup, RaiderLevel, RaiderClass, RaiderFileName, RaiderZone, RaiderOnline, RaiderIsDead, RaiderRole, RaidersIsML = GetRaidRosterInfo(Index);
 				if RaiderName == SummonName then
-					SummonInfo.Class = RaiderClass
+					SummonInfo.Class = RaiderFileName
 					SummonInfo.Zone = RaiderZone
 					SummonInfo.Online = RaiderOnline
 					SummonInfo.Dead = RaiderIsDead
