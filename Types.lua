@@ -38,28 +38,28 @@ RAW.Types.SpellIcons =
 -- Class colours, used to Append to the start of a string to change the colour
 RAW.Types.ClassColours =
 {
-	["Druid"]	= "|cffFF7D0A",
-	["Hunter"]	= "|cffABD473",
-	["Mage"]	= "|cff40C7EB",
-	["Paladin"]	= "|cffF58CBA",
-	["Priest"]	= "|cffFFFFFF",
-	["Rogue"]	= "|cffFFF569",
-	["Shaman"]	= "|cff0070DE",
-	["Warlock"]	= "|cff8787ED",
-	["Warrior"]	= "|cffC79C6E",
+	["DRUID"]	= "|cffFF7D0A",
+	["HUNTER"]	= "|cffABD473",
+	["MAGE"]	= "|cff40C7EB",
+	["PALADIN"]	= "|cffF58CBA",
+	["PRIEST"]	= "|cffFFFFFF",
+	["ROUGE"]	= "|cffFFF569",
+	["SHAMAN"]	= "|cff0070DE",
+	["WARLOCK"]	= "|cff8787ED",
+	["WARRIOR"]	= "|cffC79C6E",
 }
 
 -- Class Icons, not actual class icons because there number doesnt appear to work in game
 RAW.Types.ClassIcons = 
 {
-	["Druid"]		= 136085,
-	["Warlock"]		= 136197,
-	["Paladin"]		= 135963,
-	["Mage"]		= 135846,
-	["Shaman"]		= 136048,
-	["Warrior"]		= 132355,
-	["Rogue"]		= 132320,
-	["Hunter"]		= 132222,
-	["Priest"]		= 135940,
+	["DRUID"]		= 136085,
+	["WARLOCK"]		= 136197,
+	["PALADIN"]		= 135963,
+	["MAGE"]		= 135846,
+	["SHAMAN"]		= 136048,
+	["WARRIOR"]		= 132355,
+	["ROUGE"]		= 132320,
+	["HUNTER"]		= 132222,
+	["PRIEST"]		= 135940,
 	["Unknown"]		= 132311,
 }
