@@ -35,6 +35,22 @@ RAW.Types.SpellIcons =
 	["No Curse"] = 0,
 }
 
+
+-- Spell IDs used to create a spell makro
+RAW.Types.SpellIds =
+{
+	["Corruption"]				= 25311,
+	["Curse of Recklessness"]	= 11717,
+	["Curse of Elements"]		= 11722,
+	["Curse of Shadow"]			= 17937,
+	["Curse of Agony"]			= 11712,
+	["Curse of Weakness"]		= 11708,
+	["Curse of Doom"]			= 603,
+	["Curse of Tongues"]		= 11719,
+	["Curse of Exhaustion"]		= 18312,
+	["No Curse"] = 0,
+}
+
 -- Class colours, used to Append to the start of a string to change the colour
 RAW.Types.ClassColours =
 {
@@ -43,7 +59,7 @@ RAW.Types.ClassColours =
 	["MAGE"]	= "|cff40C7EB",
 	["PALADIN"]	= "|cffF58CBA",
 	["PRIEST"]	= "|cffFFFFFF",
-	["ROUGE"]	= "|cffFFF569",
+	["ROGUE"]	= "|cffFFF569",
 	["SHAMAN"]	= "|cff0070DE",
 	["WARLOCK"]	= "|cff8787ED",
 	["WARRIOR"]	= "|cffC79C6E",
@@ -58,7 +74,7 @@ RAW.Types.ClassIcons =
 	["MAGE"]		= 135846,
 	["SHAMAN"]		= 136048,
 	["WARRIOR"]		= 132355,
-	["ROUGE"]		= 132320,
+	["ROGUE"]		= 132320,
 	["HUNTER"]		= 132222,
 	["PRIEST"]		= 135940,
 	["Unknown"]		= 132311,

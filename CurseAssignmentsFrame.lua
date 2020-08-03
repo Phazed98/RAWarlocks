@@ -239,6 +239,11 @@ function RAW_WarlockList:UpdateWarlockListViewItems()
 
 			-- Show current entry
 			Entry:Show()
+
+			-- Update curse makro
+			if (WarlockInfo.Name == UnitName("player")) then
+				RAW_Core:UpdateCurseMakro(WarlockInfo)
+			end
 		else
 			-- Hide current entry
 			Entry:Hide()

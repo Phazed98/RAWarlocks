@@ -47,6 +47,8 @@ end
 
 -- Called when the addon is enabled
 function RAW_Core:OnEnable()
+	-- Create makro when not exist
+	self:CreateCurseMakro()
 	-- Build the Views
 	RAW.UI.BuildWarlockListView()
 	RAW.UI.BuildSummonListView()
@@ -306,4 +308,35 @@ function RAW_Core:SendAllWarlockData()
 
 	local MessageString = RAW_Core:Serialize(RAW_Core.WarlockList)
 	RAW_Core:SendCommMessage("raw-Warlocks", MessageString, "RAID", nil, "NORMAL")
+end
+
+function RAW_Core:CreateCurseMakro()
+	-- From the addon BuffoMat
+	if (GetMacroInfo("RAWarlocks"))==nil then
+		local perAccount, perChar = GetNumMacros()
+		local isChar=nil
+		if perChar<MAX_CHARACTER_MACROS then
+			isChar=1
+		elseif perAccount>=MAX_ACCOUNT_MACROS then
+			--rint(BOM.MSGPREFIX.. L.MsgNeedOneMacroSlot)
+			return
+		end			
+		--print ("generate macro",isChar)
+		CreateMacro("RAWarlocks", 134400,"",isChar)
+	end
+end
+
+function RAW_Core:UpdateCurseMakro(WarlockInfo)
+	local macroText = ""
+	local icon = 134400
+
+	if (WarlockInfo.Curse ~= "No Curse") then
+		local name = GetSpellInfo(RAW.Types.SpellIds[WarlockInfo.Curse])
+		icon = RAW.Types.SpellIcons[WarlockInfo.Curse]
+		
+		macroText="#showtooltip\n"..
+				"/cast "..name.."\n"
+	end
+
+	EditMacro("RAWarlocks",nil,icon,macroText)	
 end
