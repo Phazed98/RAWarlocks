@@ -110,9 +110,11 @@ function RAW_Summons:UpdateSummonListView()
 			local ClassIconValue = RAW.Types.ClassIcons[SummonInfo.Class]
 			Entry.ClassIcon.Texture:SetTexture(ClassIconValue)
 
+			SummonSpellName = GetSpellInfo(698) -- get local name of "Ritual of Summoning"
+
 			-- Build the Macro String, Wow API has a limitation of requireing a SecureButtonTemplate to be clicked to perform some actions
 			-- One action is UseMacro which lets us Target and Cast Ritual of Summoning, Than Announce in Raid which the EventHandler looks for to remove the item from the list
-			local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  Ritual of Summoning"
+			local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  "..SummonSpellName
 			--local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  Ritual of Summoning" .."\n/Script if IsCurrentSpell(698) then SendChatMessage(\"RAW Summoning "..SummonInfo.Name.."\", \"RAID\") end"
 			Entry.SummonButton:SetAttribute("macrotext", MacroString);
 
