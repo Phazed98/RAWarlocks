@@ -21,7 +21,7 @@ function RAW_EventHandler:Comm_WarlockSpec(Prefix, Message, Distribution, Sender
 		for k, Warlock in ipairs(RAW_Core.WarlockList) do
 			if Warlock.Name == Sender then
 				
-				RAW_Core:DebugPrint("Recieved Warlock Spec for "..Warlock.Name)
+				--RAW_Core:DebugPrint("Recieved Warlock Spec for "..Warlock.Name)
 				Warlock.Spec = SpecInfo.SpecString
 				break
 			end
@@ -39,7 +39,7 @@ function RAW_EventHandler:Comm_WarlockConfigsDump(Prefix, Message, Distribution,
 	local Success, UpdatedWarlocks = RAW_Core:Deserialize(Message)
 	if (Success) then
 	
-		RAW_Core:DebugPrint("Recieved Bulk Warlock Info From: "..Sender)
+		--RAW_Core:DebugPrint("Recieved Bulk Warlock Info From: "..Sender)
 		RAW_Core.WarlockList = UpdatedWarlocks
 
 		--We recieved Valid Data from a raid member
@@ -117,12 +117,6 @@ function RAW_EventHandler:Event_GroupJoined()
 	
 	RAW.UI.OptionsFrame.DebugCheckBox:SetChecked(RAW_Options.Debug)
 
-	if (RAW_Options.Debug) then
-		RAW.UI.RosterScrollFrame.TestFeatureButton:Show()
-	else
-		RAW.UI.RosterScrollFrame.TestFeatureButton:Hide()
-	end
-
 	--If we Just joined the group, we dont have valid data
 	RAW_Core.HasValidData = false
 
@@ -139,6 +133,7 @@ function RAW_EventHandler:Event_Login()
 	--Fill out the Custom Summon text Boxes
 	RAW.UI.OptionsFrame.SummonSessionTextBox:SetText(RAW_Options.SummonSessionText)
 	RAW.UI.OptionsFrame.SummonChatTextBox:SetText(RAW_Options.SummonChatText)
+	UIDropDownMenu_SetText(RAW.UI.OptionsFrame.AnnounceChannelDropDown, RAW_Options.AnnounceChannel)
 
 	--Update the UI Checkbox to match the stored options
 	RAW.UI.OptionsFrame.DebugCheckBox:SetChecked(RAW_Options.Debug)
