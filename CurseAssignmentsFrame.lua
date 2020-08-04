@@ -10,22 +10,47 @@ RAW.UI.RosterScrollFrame:EnableMouseWheel(false)
 
 -- Button to message the raid handing out assignments
 RAW.UI.RosterScrollFrame.MessageRaidButton = CreateFrame("BUTTON", "RAW_MessageRaidButton", RAW.UI.RosterScrollFrame, "UIPanelButtonTemplate")
-RAW.UI.RosterScrollFrame.MessageRaidButton:SetPoint("TOPLEFT", 200, 25)
-RAW.UI.RosterScrollFrame.MessageRaidButton:SetText("Send To Raid")
-RAW.UI.RosterScrollFrame.MessageRaidButton:SetSize(100, 22)
+RAW.UI.RosterScrollFrame.MessageRaidButton:SetPoint("TOPLEFT", 180, 25)
+RAW.UI.RosterScrollFrame.MessageRaidButton:SetText("Annouce Curses")
+RAW.UI.RosterScrollFrame.MessageRaidButton:SetSize(110, 22)
 
 -- TODO Move this to its own function
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetScript("OnClick", function()
 
+	local ChannelName = "None"
+	local ChannelNumber = -1
+
+	local NumChannels = GetNumDisplayChannels();
+	for Index = 0, NumChannels, 1  do
+		name, header, collapsed, channelNumber, count, active, category, voiceEnabled, voiceActive = GetChannelDisplayInfo(Index);
+	
+		if name =="Group" then
+			name = "Party"
+		end
+
+		if name == RAW_Options.AnnounceChannel then
+
+			if channelNumber ~= nil then
+				ChannelName = "CHANNEL"
+				ChannelNumber = channelNumber
+			else
+				ChannelName = name
+				ChannelNumber = nil
+			end
+			
+			break
+		end
+	end
+
 	-- Send to Raid
-	SendChatMessage(" ---- Curse Assignments Start  ------", "RAID", nil, nil)
+	SendChatMessage(" ---- Curse Assignments Start  ------", ChannelName, nil, ChannelNumber)
 
 	-- Go through the warlocks and announce thier curse in raid
 	for k, Warlock in ipairs(RAW_Core.WarlockList) do
 		if Warlock ~= nil and Warlock.Name ~= nil then
 
 			-- build a basic string to inform them
-			local TextString = Warlock.Name .." Your Curse is: "..Warlock.Curse
+			local TextString = Warlock.Name ..": "..Warlock.Curse
 
 			-- TODO: Improve this display
 			-- Tack on corruption info
@@ -35,19 +60,19 @@ RAW.UI.RosterScrollFrame.MessageRaidButton:SetScript("OnClick", function()
 			end
 
 			-- Send to Raid
-			SendChatMessage(TextString, "RAID", nil, nil)
+			SendChatMessage(TextString, ChannelName, nil, ChannelNumber)
 		end
 	end
 
 	-- Send to Raid
-	SendChatMessage(" ---- Curse Assignments End    ------", "RAID", nil, nil)
+	SendChatMessage(" ---- Curse Assignments End    ------", ChannelName, nil, ChannelNumber)
 end)
 
 -- Button to message the Warlocks via Whisper
 RAW.UI.RosterScrollFrame.WhisperWarlocksButton = CreateFrame("BUTTON", "RAW_WhisperWarlocksButton", RAW.UI.RosterScrollFrame, "UIPanelButtonTemplate")
-RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetPoint("TOPLEFT", 300, 25)
+RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetPoint("TOPLEFT", 290, 25)
 RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetText("Send Whispers")
-RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetSize(100, 22)
+RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetSize(110, 22)
 RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetScript("OnClick", function()
 
 	-- Go through the warlocks and tell them thier assignment
@@ -57,14 +82,6 @@ RAW.UI.RosterScrollFrame.WhisperWarlocksButton:SetScript("OnClick", function()
 
 end)
 
-
--- Button to message the Warlocks via Whisper
-RAW.UI.RosterScrollFrame.TestFeatureButton = CreateFrame("BUTTON", "RAW_TestFeatureButton", RAW.UI.RosterScrollFrame, "UIPanelButtonTemplate")
-RAW.UI.RosterScrollFrame.TestFeatureButton:SetPoint("TOPLEFT", 100, 25)
-RAW.UI.RosterScrollFrame.TestFeatureButton:SetText("Test")
-RAW.UI.RosterScrollFrame.TestFeatureButton:SetSize(100, 22)
-RAW.UI.RosterScrollFrame.TestFeatureButton:SetScript("OnClick", function()
-end)
 
 -- Scroll Bar used to navigate the Warlock list
 RAW.UI.RosterScrollBar = CreateFrame("Slider", "RAW_RosterScrollBar", RAW.UI.RosterScrollFrame, "UIPanelScrollBarTemplate")

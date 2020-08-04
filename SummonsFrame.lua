@@ -45,6 +45,8 @@ function RAW.UI.BuildSummonListView()
 		SummonFrameEntry:SetBackdropColor(0, 0, 0, 1.0)
 		SummonFrameEntry:EnableMouse(true)
 
+		SummonFrameEntry.PlayerName = "None"
+
 		-- Name of the person requesting a summon
 		SummonFrameEntry.Name = SummonFrameEntry:CreateFontString(tostring("RAW_SoulstonedListViewItems"..i.."_NameText"), "OVERLAY", "GameFontNormalLarge")
 		SummonFrameEntry.Name:SetPoint("TOPLEFT", 40, -2)
@@ -63,8 +65,26 @@ function RAW.UI.BuildSummonListView()
 		SummonFrameEntry.ClassIcon.Texture:SetAllPoints(SummonFrameEntry.ClassIcon)	
 		SummonFrameEntry.ClassIcon.Texture:SetTexture( RAW.Types.ClassIcons["Unknown"])
 
+		-- Button used to clear the summon without summoning them
+		SummonFrameEntry.ClearButton = CreateFrame("BUTTON", tostring("RAW_ClearButton"), SummonFrameEntry, "UIPanelButtonTemplate")
+		SummonFrameEntry.ClearButton:SetPoint("RIGHT", -100, 0)
+		SummonFrameEntry.ClearButton:SetText("Remove")
+		SummonFrameEntry.ClearButton:SetSize(60, 25)
+		SummonFrameEntry.ClearButton:SetScript("OnClick", function()
+
+			for k, Target in ipairs(RAW_Core.SummonList) do
+				if SummonFrameEntry.PlayerName == Target.Name then
+					Target.Status = "InProgress"
+					break
+				end
+			end
+
+			--Refresh the view
+			RAW_Summons:UpdateSummonListView()
+		end)
+
 		-- Button used to summon the person
-		SummonFrameEntry.SummonButton = CreateFrame("BUTTON", "RAW_SummonButton", SummonFrameEntry, "SecureActionButtonTemplate, MagicButtonTemplate");
+		SummonFrameEntry.SummonButton = CreateFrame("BUTTON", "RAW_SummonButton", SummonFrameEntry, "SecureActionButtonTemplate, UIPanelButtonTemplate");
 		SummonFrameEntry.SummonButton:SetPoint("RIGHT", -10, 0)
 		SummonFrameEntry.SummonButton:SetText("Summon")
 		SummonFrameEntry.SummonButton:SetSize(60, 25)
@@ -103,6 +123,8 @@ function RAW_Summons:UpdateSummonListView()
 			-- Cache it locally
 			local SummonInfo = RAW_Core.SummonList[SummonListIndex]
 
+			Entry.PlayerName = SummonInfo.Name
+
 			local NameText = RAW.Types.ClassColours[SummonInfo.Class]..SummonInfo.Name
 			Entry.Name:SetText(NameText)
 			Entry.Location:SetText(SummonInfo.Zone)
@@ -117,6 +139,7 @@ function RAW_Summons:UpdateSummonListView()
 			local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  "..SummonSpellName
 			--local MacroString = "/Tar "..SummonInfo.Name .."\n/cast  Ritual of Summoning" .."\n/Script if IsCurrentSpell(698) then SendChatMessage(\"RAW Summoning "..SummonInfo.Name.."\", \"RAID\") end"
 			Entry.SummonButton:SetAttribute("macrotext", MacroString);
+
 
 			-- Show current entry
 			Entry:Show()

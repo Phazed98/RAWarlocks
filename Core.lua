@@ -238,7 +238,7 @@ end
 -- Clears warlocksno longer in the raid from the Warlock List
 function RAW_Core:RemoveMissingWarlocks()
 
-	RAW_Core:DebugPrint("Removing Missing Warlocks")
+	--RAW_Core:DebugPrint("Removing Missing Warlocks")
 
 	-- Iterate Backwords through list and remove all Dirty Entries
 	for WarlockIndex = #RAW_Core.WarlockList, 1, -1 do
@@ -258,7 +258,7 @@ function RAW_Core:RemoveMissingWarlocks()
 		end
 
 		if not InRaid then
-			RAW_Core:DebugPrint("Removing: "..RAW_Core.WarlockList[WarlockIndex].Name)
+			--RAW_Core:DebugPrint("Removing: "..RAW_Core.WarlockList[WarlockIndex].Name)
 			table.remove(RAW_Core.WarlockList, WarlockIndex)
 		end
 	end
