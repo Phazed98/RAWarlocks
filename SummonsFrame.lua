@@ -100,6 +100,14 @@ end
 -- Refreshes the SummonFrameView Entries
 function RAW_Summons:UpdateSummonListView()
 
+
+	if (InCombatLockdown() == true) then
+		-- Player is in fight, we have to wait to be able to change the summon macro
+		RAW_Core.UpdateSummons = true
+		return
+	end
+
+
 	--Scrollbar Determines which Index to start at
 	local SummonListIndex = RAW.UI.SummonsScrollBar:GetValue()
 
@@ -148,4 +156,25 @@ function RAW_Summons:UpdateSummonListView()
 			Entry:Hide()
 		end
 	end
+	self:UpdateSummonMakro()
 end
+
+
+function RAW_Summons:UpdateSummonMakro()
+	local MacroString = ""
+	EditMacro("RAPort",nil,136223,MacroString)
+
+	for Index, Entry in ipairs(RAW_Core.SummonList) do
+
+		if (RAW_Core.SummonList[Index] ~= nil and RAW_Core.SummonList[Index].Status == "Queued") then
+
+			SummonSpellName = GetSpellInfo(698) -- get local name of "Ritual of Summoning"
+			--local MacroString = "/Tar "..Entry.Name .."\n/cast  "..SummonSpellName
+
+			MacroString = "#showtooltip "..SummonSpellName.."\n/Tar "..Entry.Name .."\n/cast  "..SummonSpellName
+			EditMacro("RAPort",nil,136223,MacroString)
+			break
+		end
+	end
+end
+

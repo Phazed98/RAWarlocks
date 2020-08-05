@@ -154,6 +154,11 @@ function RAW_EventHandler:Event_FinishCombat()
 		RAW_Core:UpdateCurseMakro(RAW_Core.ChangeCurseTo)
 		RAW_Core.ChangeCurseTo = nil
 	end
+
+	if (RAW_Core.UpdateSummons) then
+		RAW_Summons:UpdateSummonListView()
+		RAW_Core.UpdateSummons = false
+	end
 end
 
 

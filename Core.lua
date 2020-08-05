@@ -24,6 +24,9 @@ RAW_Core.HasValidData = false
 -- Store new Curse until combat is finish
 RAW_Core.ChangeCurseTo = nil
 
+-- If Summons list change on combat we have to set this flag and render the list after fight.
+RAW_Core.UpdateSummons = false
+
 --Debug Print That Doesnt Print In Public Builds
 function RAW_Core:DebugPrint(Value)
 	if (RAW_Options.Debug) then
@@ -51,7 +54,11 @@ end
 -- Called when the addon is enabled
 function RAW_Core:OnEnable()
 	-- Create makro when not exist
-	self:CreateCurseMakro()
+	self:CreateMakro("RAWarlocks",134400)
+
+	-- Create port makro when not exist
+	self:CreateMakro("RAPort",136223)
+
 	-- Build the Views
 	RAW.UI.BuildWarlockListView()
 	RAW.UI.BuildSummonListView()
@@ -316,19 +323,16 @@ function RAW_Core:SendAllWarlockData()
 	RAW_Core:SendCommMessage("raw-Warlocks", MessageString, "RAID", nil, "NORMAL")
 end
 
-function RAW_Core:CreateCurseMakro()
-	-- From the addon BuffoMat
-	if (GetMacroInfo("RAWarlocks"))==nil then
+function RAW_Core:CreateMakro(name,icon)
+	if (GetMacroInfo(name))==nil then
 		local perAccount, perChar = GetNumMacros()
 		local isChar=nil
 		if perChar<MAX_CHARACTER_MACROS then
 			isChar=1
 		elseif perAccount>=MAX_ACCOUNT_MACROS then
-			--rint(BOM.MSGPREFIX.. L.MsgNeedOneMacroSlot)
 			return
 		end			
-		--print ("generate macro",isChar)
-		CreateMacro("RAWarlocks", 134400,"",isChar)
+		CreateMacro(name, icon,"",isChar)
 	end
 end
 
