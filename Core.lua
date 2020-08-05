@@ -21,6 +21,9 @@ RAW_Core.AddonUserList = {}
 -- If the Warlock data we have is valid
 RAW_Core.HasValidData = false
 
+-- Store new Curse until combat is finish
+RAW_Core.ChangeCurseTo = nil
+
 --Debug Print That Doesnt Print In Public Builds
 function RAW_Core:DebugPrint(Value)
 	if (RAW_Options.Debug) then
@@ -75,6 +78,9 @@ function RAW_Core:OnEnable()
 	RAW_EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD", "Event_Login")
 
 	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_DISABLED", "Event_EnteredCombat")
+	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED", "Event_FinishCombat")
+
+	
 	
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", "Event_SpellCastSucceded")
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_START", "Event_SpellCastStarted")
@@ -326,17 +332,27 @@ function RAW_Core:CreateCurseMakro()
 	end
 end
 
-function RAW_Core:UpdateCurseMakro(WarlockInfo)
-	local macroText = ""
-	local icon = 134400
+function RAW_Core:UpdateCurseMakro(Curse)
 
-	if (WarlockInfo.Curse ~= "No Curse") then
-		local name = GetSpellInfo(RAW.Types.SpellIds[WarlockInfo.Curse])
-		icon = RAW.Types.SpellIcons[WarlockInfo.Curse]
+	if (InCombatLockdown() == true) then
+		-- Player is in fight, we have to wait to be able to change the curse macro
+		RAW_Core.ChangeCurseTo = Curse
+	end
+
+
+	RAW_Core:DebugPrint("Update curse Macro")
+	local macroText = ""
+	local icon = 134400 -- set "?" icon when no curse is set
+
+	if (Curse ~= "No Curse") then
+		local name = GetSpellInfo(RAW.Types.SpellIds[Curse])
+		icon = RAW.Types.SpellIcons[Curse]
 		
-		macroText="#showtooltip\n"..
+		macroText="#showtooltip "..name.."\n"..
 				"/cast "..name.."\n"
 	end
 
 	EditMacro("RAWarlocks",nil,icon,macroText)	
 end
+
+

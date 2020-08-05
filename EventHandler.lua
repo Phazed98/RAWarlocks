@@ -148,6 +148,15 @@ function RAW_EventHandler:Event_EnteredCombat()
 end
 
 
+function RAW_EventHandler:Event_FinishCombat()
+	if (RAW_Core.ChangeCurseTo) then
+		-- We get a new Curse on Combat now we can change the makro
+		RAW_Core:UpdateCurseMakro(RAW_Core.ChangeCurseTo)
+		RAW_Core.ChangeCurseTo = nil
+	end
+end
+
+
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_SpellCastStarted(IDString, Source, CastGUID, SpellID)
 	name, rank, icon, castTime, minRange, maxRange, spellId = GetSpellInfo(SpellID)
