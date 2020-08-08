@@ -142,11 +142,13 @@ function RAW_EventHandler:Event_Login()
 	RAW_EventHandler:Event_GroupJoined()
 end
 
--- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_EnteredCombat()
 	RAWarlocks:Hide()
 end
 
+function RAW_EventHandler:Event_ExitedCombat()
+	RAW_WarlockList:UpdateWarlockListViewItems()
+end
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_SpellCastStarted(IDString, Source, CastGUID, SpellID)
