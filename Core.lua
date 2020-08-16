@@ -91,7 +91,8 @@ function RAW_Core:OnEnable()
 	RAW_EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD", "Event_Login")
 
 	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_DISABLED", "Event_EnteredCombat")
-	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED", "Event_FinishCombat")
+	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED", "Event_ExitedCombat")
+	
 
 	
 	
