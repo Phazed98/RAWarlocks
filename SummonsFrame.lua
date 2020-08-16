@@ -171,7 +171,7 @@ function RAW_Summons:UpdateSummonMakro()
 			SummonSpellName = GetSpellInfo(698) -- get local name of "Ritual of Summoning"
 			--local MacroString = "/Tar "..Entry.Name .."\n/cast  "..SummonSpellName
 
-			MacroString = "#showtooltip "..SummonSpellName.."\n/Tar "..Entry.Name .."\n/cast  "..SummonSpellName
+			MacroString = "#showtooltip "..SummonSpellName.."\n/Tar [modifier:shift] "..Entry.Name .."\n/cast  "..SummonSpellName
 			EditMacro("RAPort",nil,136223,MacroString)
 			break
 		end

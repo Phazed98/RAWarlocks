@@ -21,6 +21,8 @@ RAW_Core.AddonUserList = {}
 -- If the Warlock data we have is valid
 RAW_Core.HasValidData = false
 
+RAW_Core.NumShardsTotal = 0
+
 -- Store new Curse until combat is finish
 RAW_Core.ChangeCurseTo = nil
 
@@ -59,6 +61,8 @@ function RAW_Core:OnEnable()
 	-- Create port makro when not exist
 	self:CreateMakro("RAPort",136223)
 
+
+
 	-- Build the Views
 	RAW.UI.BuildWarlockListView()
 	RAW.UI.BuildSummonListView()
@@ -67,7 +71,9 @@ function RAW_Core:OnEnable()
 	RAW_Core.HasValidData = false
 
 	-- Addon Comms
+
 	RAW_EventHandler:RegisterComm("raw-Spec", "Comm_WarlockSpec")
+	RAW_EventHandler:RegisterComm("raw-Shards", "Comm_WarlockShards")
 	RAW_EventHandler:RegisterComm("raw-Warlocks", "Comm_WarlockConfigsDump")
 	RAW_EventHandler:RegisterComm("raw-Announce", "Comm_AddonUserAnnounced")
 	RAW_EventHandler:RegisterComm("raw-NewSession", "Comm_NewSession")
@@ -102,6 +108,9 @@ function RAW_Core:OnEnable()
 
 	-- Send the Spec Via Addon Message (Probably Just Local Update)
 	RAW_Core:SendSpec()
+
+	-- Count Shards and send it
+	RAW_Core:UpdateShards()
 end
 
 -- Called when the addon is disabled
@@ -360,3 +369,20 @@ function RAW_Core:UpdateCurseMakro(Curse)
 end
 
 
+
+function RAW_Core:UpdateShards()
+	local numShardsTotal = 0
+	for bag=0,4 do 
+		for slot=1,GetContainerNumSlots(bag) do
+			if GetContainerItemID(bag, slot) == 6265 then
+				numShardsTotal = numShardsTotal+1
+			end
+		end
+	end
+
+	if (numShardsTotal ~= self.NumShardsTotal) then
+		self.NumShardsTotal = numShardsTotal
+		print("send shards to raid")
+		self:SendCommMessage("raw-Shards", tostring(numShardsTotal), "RAID", nil, "NORMAL")
+	end
+end
