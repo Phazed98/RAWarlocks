@@ -11,7 +11,7 @@ RAW.UI.RosterScrollFrame:EnableMouseWheel(false)
 -- Button to message the raid handing out assignments
 RAW.UI.RosterScrollFrame.MessageRaidButton = CreateFrame("BUTTON", "RAW_MessageRaidButton", RAW.UI.RosterScrollFrame, "UIPanelButtonTemplate")
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetPoint("TOPLEFT", 180, 25)
-RAW.UI.RosterScrollFrame.MessageRaidButton:SetText("Annouce Curses")
+RAW.UI.RosterScrollFrame.MessageRaidButton:SetText("Announce Curses")
 RAW.UI.RosterScrollFrame.MessageRaidButton:SetSize(110, 22)
 
 -- TODO Move this to its own function
@@ -242,7 +242,7 @@ function RAW_WarlockList:UpdateWarlockListViewItems()
 
 			-- Update curse makro
 			if (WarlockInfo.Name == UnitName("player")) then
-				RAW_Core:UpdateCurseMakro(WarlockInfo)
+				RAW_Core:UpdateCurseMakro(WarlockInfo.Curse)
 			end
 		else
 			-- Hide current entry

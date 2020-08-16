@@ -21,6 +21,14 @@ RAW_Core.AddonUserList = {}
 -- If the Warlock data we have is valid
 RAW_Core.HasValidData = false
 
+RAW_Core.NumShardsTotal = 0
+
+-- Store new Curse until combat is finish
+RAW_Core.ChangeCurseTo = nil
+
+-- If Summons list change on combat we have to set this flag and render the list after fight.
+RAW_Core.UpdateSummons = false
+
 --Debug Print That Doesnt Print In Public Builds
 function RAW_Core:DebugPrint(Value)
 	if (RAW_Options.Debug) then
@@ -48,7 +56,13 @@ end
 -- Called when the addon is enabled
 function RAW_Core:OnEnable()
 	-- Create makro when not exist
-	self:CreateCurseMakro()
+	self:CreateMakro("RAWarlocks",134400)
+
+	-- Create port makro when not exist
+	self:CreateMakro("RAPort",136223)
+
+
+
 	-- Build the Views
 	RAW.UI.BuildWarlockListView()
 	RAW.UI.BuildSummonListView()
@@ -57,7 +71,9 @@ function RAW_Core:OnEnable()
 	RAW_Core.HasValidData = false
 
 	-- Addon Comms
+
 	RAW_EventHandler:RegisterComm("raw-Spec", "Comm_WarlockSpec")
+	RAW_EventHandler:RegisterComm("raw-Shards", "Comm_WarlockShards")
 	RAW_EventHandler:RegisterComm("raw-Warlocks", "Comm_WarlockConfigsDump")
 	RAW_EventHandler:RegisterComm("raw-Announce", "Comm_AddonUserAnnounced")
 	RAW_EventHandler:RegisterComm("raw-NewSession", "Comm_NewSession")
@@ -73,9 +89,12 @@ function RAW_Core:OnEnable()
 
 	RAW_EventHandler:RegisterEvent("PLAYER_LOGIN", "Event_Login")
 	RAW_EventHandler:RegisterEvent("PLAYER_ENTERING_WORLD", "Event_Login")
-	
+
 	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_DISABLED", "Event_EnteredCombat")
 	RAW_EventHandler:RegisterEvent("PLAYER_REGEN_ENABLED", "Event_ExitedCombat")
+	
+
+	
 	
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_SUCCEEDED", "Event_SpellCastSucceded")
 	RAW_EventHandler:RegisterEvent("UNIT_SPELLCAST_START", "Event_SpellCastStarted")
@@ -90,6 +109,9 @@ function RAW_Core:OnEnable()
 
 	-- Send the Spec Via Addon Message (Probably Just Local Update)
 	RAW_Core:SendSpec()
+
+	-- Count Shards and send it
+	RAW_Core:UpdateShards()
 end
 
 -- Called when the addon is disabled
@@ -311,33 +333,57 @@ function RAW_Core:SendAllWarlockData()
 	RAW_Core:SendCommMessage("raw-Warlocks", MessageString, "RAID", nil, "NORMAL")
 end
 
-function RAW_Core:CreateCurseMakro()
-	-- From the addon BuffoMat
-	if (GetMacroInfo("RAWarlocks"))==nil then
+function RAW_Core:CreateMakro(name,icon)
+	if (GetMacroInfo(name))==nil then
 		local perAccount, perChar = GetNumMacros()
 		local isChar=nil
 		if perChar<MAX_CHARACTER_MACROS then
 			isChar=1
 		elseif perAccount>=MAX_ACCOUNT_MACROS then
-			--rint(BOM.MSGPREFIX.. L.MsgNeedOneMacroSlot)
 			return
 		end			
-		--print ("generate macro",isChar)
-		CreateMacro("RAWarlocks", 134400,"",isChar)
+		CreateMacro(name, icon,"",isChar)
 	end
 end
 
-function RAW_Core:UpdateCurseMakro(WarlockInfo)
-	local macroText = ""
-	local icon = 134400
+function RAW_Core:UpdateCurseMakro(Curse)
 
-	if (WarlockInfo.Curse ~= "No Curse") then
-		local name = GetSpellInfo(RAW.Types.SpellIds[WarlockInfo.Curse])
-		icon = RAW.Types.SpellIcons[WarlockInfo.Curse]
+	if (InCombatLockdown() == true) then
+		-- Player is in fight, we have to wait to be able to change the curse macro
+		RAW_Core.ChangeCurseTo = Curse
+	end
+
+
+	RAW_Core:DebugPrint("Update curse Macro")
+	local macroText = ""
+	local icon = 134400 -- set "?" icon when no curse is set
+
+	if (Curse ~= "No Curse") then
+		local name = GetSpellInfo(RAW.Types.SpellIds[Curse])
+		icon = RAW.Types.SpellIcons[Curse]
 		
-		macroText="#showtooltip\n"..
+		macroText="#showtooltip "..name.."\n"..
 				"/cast "..name.."\n"
 	end
 
 	EditMacro("RAWarlocks",nil,icon,macroText)	
+end
+
+
+
+function RAW_Core:UpdateShards()
+	local numShardsTotal = 0
+	for bag=0,4 do 
+		for slot=1,GetContainerNumSlots(bag) do
+			if GetContainerItemID(bag, slot) == 6265 then
+				numShardsTotal = numShardsTotal+1
+			end
+		end
+	end
+
+	if (numShardsTotal ~= self.NumShardsTotal) then
+		self.NumShardsTotal = numShardsTotal
+		print("send shards to raid")
+		self:SendCommMessage("raw-Shards", tostring(numShardsTotal), "RAID", nil, "NORMAL")
+	end
 end

@@ -32,6 +32,35 @@ function RAW_EventHandler:Comm_WarlockSpec(Prefix, Message, Distribution, Sender
 	RAW_WarlockList:UpdateWarlockListViewItems()
 end
 
+
+-- Handles Comm Message Recieved Containing Warlock Shards
+function RAW_EventHandler:Comm_WarlockShards(Prefix, Message, Distribution, Sender)
+
+	print("recive new Shards anz")
+	print("from "..Sender)
+
+	-- Try to Deserialize the Spec info, if success update the Entry and refresh the UI
+	local Shards = tonumber(Message)
+	
+		-- Look through the list of Warlocks, if they match set thier Spec String
+		for k, Warlock in ipairs(RAW_Core.WarlockList) do
+			if Warlock.Name == Sender then
+				
+				--RAW_Core:DebugPrint("Recieved Warlock Spec for "..Warlock.Name)
+				Warlock.Shards = Shards
+				print(Sender.." "..Shards)
+				break
+			end
+		end
+
+
+	-- Refresh the UI
+	RAW_WarlockList:UpdateWarlockListViewItems()
+end
+
+
+
+
 -- Handles Comm Message Recieved Containing All Warlock Info Dump
 function RAW_EventHandler:Comm_WarlockConfigsDump(Prefix, Message, Distribution, Sender)
 
@@ -149,6 +178,18 @@ end
 function RAW_EventHandler:Event_ExitedCombat()
 	RAW_WarlockList:UpdateWarlockListViewItems()
 end
+
+function RAW_EventHandler:Event_ExitedCombat()
+	if (RAW_Core.ChangeCurseTo) then
+		-- We get a new Curse on Combat now we can change the makro
+		RAW_Core:UpdateCurseMakro(RAW_Core.ChangeCurseTo)
+		RAW_Core.ChangeCurseTo = nil
+	end
+
+	RAW_Summons:UpdateSummonListView()
+	RAW_Core:UpdateShards()
+end
+
 
 -- Hook to GROUP_JOINED, PLAYER_LOGIN, PLAYER_ENTERING_WORLD
 function RAW_EventHandler:Event_SpellCastStarted(IDString, Source, CastGUID, SpellID)
