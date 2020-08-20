@@ -383,7 +383,7 @@ function RAW_Core:UpdateShards()
 
 	if (numShardsTotal ~= self.NumShardsTotal) then
 		self.NumShardsTotal = numShardsTotal
-		print("send shards to raid")
+		--print("send shards to raid")
 		self:SendCommMessage("raw-Shards", tostring(numShardsTotal), "RAID", nil, "NORMAL")
 	end
 end

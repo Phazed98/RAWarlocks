@@ -36,8 +36,8 @@ end
 -- Handles Comm Message Recieved Containing Warlock Shards
 function RAW_EventHandler:Comm_WarlockShards(Prefix, Message, Distribution, Sender)
 
-	print("recive new Shards anz")
-	print("from "..Sender)
+	--print("recive new Shards anz")
+	--print("from "..Sender)
 
 	-- Try to Deserialize the Spec info, if success update the Entry and refresh the UI
 	local Shards = tonumber(Message)
@@ -48,7 +48,7 @@ function RAW_EventHandler:Comm_WarlockShards(Prefix, Message, Distribution, Send
 				
 				--RAW_Core:DebugPrint("Recieved Warlock Spec for "..Warlock.Name)
 				Warlock.Shards = Shards
-				print(Sender.." "..Shards)
+				--print(Sender.." "..Shards)
 				break
 			end
 		end

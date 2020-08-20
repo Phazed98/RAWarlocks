@@ -23,11 +23,11 @@ RAW.UI.OptionsFrame.DebugCheckBox:SetChecked(RAW_Options.Debug)
 RAW.UI.OptionsFrame.DebugCheckBox:SetScript("OnClick", function()
 	RAW_Options.Debug = RAW.UI.OptionsFrame.DebugCheckBox:GetChecked()
 	
-	if (RAW_Options.Debug) then
-		RAW.UI.RosterScrollFrame.TestFeatureButton:Show()
-	else
-		RAW.UI.RosterScrollFrame.TestFeatureButton:Hide()
-	end
+	--if (RAW_Options.Debug) then
+	--	RAW.UI.RosterScrollFrame.TestFeatureButton:Show()
+	--else
+	--	RAW.UI.RosterScrollFrame.TestFeatureButton:Hide()
+	--end
 
 end);
  -- Enable or Disable Debug Mode
